@@ -139,7 +139,7 @@
             <p><strong>Building Permit (BP) drawings are NOT for construction.</strong> All BP hard copies must be destroyed or removed from site. Only Issued For Construction (IFC) drawings shall be used. If IFC drawings are not yet issued, BP may be used for rough pricing only.</p>
           </div>
           
-          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+          <div class="checkbox-item" onclick="toggleCheckbox(event, this)">
             <input type="checkbox" id="ackDrawings" required>
             <div class="checkbox-label">I understand BP drawings are not for construction and will ensure all trades use IFC drawings only</div>
           </div>
@@ -156,7 +156,7 @@
             <p>Review the Structural General Notes included with the drawing package. These contain critical information about materials, connections, and construction requirements.</p>
           </div>
           
-          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+          <div class="checkbox-item" onclick="toggleCheckbox(event, this)">
             <input type="checkbox" id="ackGeneralNotes" required>
             <div class="checkbox-label">I have read and understand the Structural General Notes</div>
           </div>
@@ -178,7 +178,7 @@
             <p><strong>Hold Down Anchors:</strong> HDU hold downs greater than HDU8 and other specified anchors MUST be cast into concrete. Post-installed or epoxy anchors are NOT permitted. Refer to plans or contact Juniper.</p>
           </div>
           
-          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+          <div class="checkbox-item" onclick="toggleCheckbox(event, this)">
             <input type="checkbox" id="ackHoldDowns" required>
             <div class="checkbox-label">I understand cast-in-place anchor requirements</div>
           </div>
@@ -187,7 +187,7 @@
             <p><strong>Shear Wall Nailing:</strong> Nail gun pressure must be set evenly. Overdriven nails exceeding 10% of panel thickness will be rejected.</p>
           </div>
           
-          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+          <div class="checkbox-item" onclick="toggleCheckbox(event, this)">
             <input type="checkbox" id="ackNailing" required>
             <div class="checkbox-label">I understand shear wall nailing requirements</div>
           </div>
@@ -200,7 +200,7 @@
           <h2>Section 5: Shop Drawings</h2>
         </div>
         <div class="section-body">
-          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+          <div class="checkbox-item" onclick="toggleCheckbox(event, this)">
             <input type="checkbox" id="ackShopDrawings" required>
             <div class="checkbox-label">I understand shop drawings must be submitted and approved before fabrication</div>
           </div>
@@ -227,7 +227,7 @@
             <p><strong>EWP Grades:</strong> Confirm your supplier stocks the material grades and joist series listed in Juniper's general notes. Notify Juniper of any discrepancies BEFORE shop drawing submittal.</p>
           </div>
           
-          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+          <div class="checkbox-item" onclick="toggleCheckbox(event, this)">
             <input type="checkbox" id="ackEWPGrades">
             <div class="checkbox-label">I have confirmed EWP grades with supplier (or will notify Juniper of discrepancies)</div>
           </div>
@@ -249,7 +249,7 @@
             <p><strong>48 hour advance notice is required</strong> for all field reviews. Structural elements must not be covered until reviewed by Juniper.</p>
           </div>
           
-          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+          <div class="checkbox-item" onclick="toggleCheckbox(event, this)">
             <input type="checkbox" id="ackFieldReviewNotice" required>
             <div class="checkbox-label">I will provide 48 hour notice and not cover structural elements until reviewed</div>
           </div>
@@ -258,7 +258,7 @@
             <p><strong>Concrete Reviews:</strong> One side of forms must remain off so reinforcing is clearly visible. Adequate time must be provided for review before pour.</p>
           </div>
           
-          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+          <div class="checkbox-item" onclick="toggleCheckbox(event, this)">
             <input type="checkbox" id="ackConcreteReview" required>
             <div class="checkbox-label">I understand concrete reinforcing review requirements</div>
           </div>
@@ -278,7 +278,7 @@
             <p><strong>Photo Reviews:</strong> Photo reviews are at Juniper's sole discretion and may not be accepted without prior approval.</p>
           </div>
           
-          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+          <div class="checkbox-item" onclick="toggleCheckbox(event, this)">
             <input type="checkbox" id="ackPhotoReviews" required>
             <div class="checkbox-label">I understand photo reviews require prior Juniper approval</div>
           </div>
@@ -287,7 +287,7 @@
             <p><strong>Scope:</strong> Field Review confirms general conformance with structural drawings. It is NOT inspection or supervision. The contractor remains responsible for ensuring work meets the drawings.</p>
           </div>
           
-          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+          <div class="checkbox-item" onclick="toggleCheckbox(event, this)">
             <input type="checkbox" id="ackFieldReviewScope" required>
             <div class="checkbox-label">I understand I am responsible for ensuring work meets the structural drawings</div>
           </div>
@@ -332,7 +332,7 @@
           <h2>Acknowledgment & Signature</h2>
         </div>
         <div class="section-body">
-          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+          <div class="checkbox-item" onclick="toggleCheckbox(event, this)">
             <input type="checkbox" id="finalAck" required>
             <div class="checkbox-label">I confirm this information is accurate and I have reviewed the structural drawings and general notes</div>
           </div>
@@ -436,7 +436,12 @@
       document.getElementById('successState').classList.remove('hidden');
     }
 
-    function toggleCheckbox(element) {
+    function toggleCheckbox(event, element) {
+      // Don't toggle if clicking directly on checkbox (it handles itself)
+      if (event.target.type === 'checkbox') {
+        element.classList.toggle('checked', event.target.checked);
+        return;
+      }
       const checkbox = element.querySelector('input[type="checkbox"]');
       checkbox.checked = !checkbox.checked;
       element.classList.toggle('checked', checkbox.checked);
