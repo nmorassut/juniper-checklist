@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Juniper Engineers - Pre-Construction Checklist</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Montserrat', sans-serif; background-color: #fafafa; color: #4A515A; line-height: 1.6; }
@@ -379,7 +380,26 @@
       document.getElementById('newContractorEmail').value = '';
     }
 
-    // Create checklist - saves to Firebase
+    // Initialize EmailJS
+    emailjs.init('5rpG22lO-LCh-4rb0');
+
+    // Send email function
+    async function sendChecklistEmail(toEmail, projectName, location, formLink) {
+      try {
+        await emailjs.send('service_2cciymp', 'template_n65nogq', {
+          to_email: toEmail,
+          project_name: projectName,
+          location: location || 'Not specified',
+          form_link: formLink
+        });
+        return true;
+      } catch (error) {
+        console.error('Email error:', error);
+        return false;
+      }
+    }
+
+    // Create checklist - saves to Firebase and sends email
     async function createChecklist() {
       const projectName = document.getElementById('newProjectName').value;
       const location = document.getElementById('newLocation').value;
@@ -410,6 +430,13 @@
         // Save to Firebase
         const docRef = await db.collection('checklists').add(newChecklist);
         
+        // Generate form link
+        const formLink = `${window.location.origin}/form.html?id=${docRef.id}`;
+        
+        // Send email
+        btn.textContent = 'Sending email...';
+        const emailSent = await sendChecklistEmail(contractorEmail, projectName, location, formLink);
+        
         // Add to local array with the Firebase ID
         checklists.unshift({
           id: docRef.id,
@@ -419,7 +446,12 @@
         renderTable();
         updateStats();
         closeCreateModal();
-        alert(`Checklist created! Email would be sent to ${contractorEmail}`);
+        
+        if (emailSent) {
+          alert(`Checklist created and email sent to ${contractorEmail}!`);
+        } else {
+          alert(`Checklist created but email failed. You can resend or copy the link manually.`);
+        }
       } catch (error) {
         console.error('Error creating checklist:', error);
         alert('Error creating checklist. Please try again.');
@@ -460,10 +492,24 @@
     }
 
     // Actions
-    function sendReminder(id) {
+    async function sendReminder(id) {
       const checklist = checklists.find(c => c.id === id);
-      if (checklist) {
-        alert(`Reminder email would be sent to ${checklist.contractorEmail} for ${checklist.projectName}`);
+      if (!checklist) return;
+      
+      if (confirm(`Send reminder email to ${checklist.contractorEmail}?`)) {
+        const formLink = `${window.location.origin}/form.html?id=${id}`;
+        const emailSent = await sendChecklistEmail(
+          checklist.contractorEmail, 
+          checklist.projectName, 
+          checklist.location, 
+          formLink
+        );
+        
+        if (emailSent) {
+          alert(`Reminder sent to ${checklist.contractorEmail}!`);
+        } else {
+          alert('Failed to send reminder. Please try again.');
+        }
       }
     }
 
