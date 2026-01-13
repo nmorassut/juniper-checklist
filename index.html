@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juniper Engineers - Pre-Construction Checklist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Montserrat', sans-serif; background-color: #fafafa; color: #4A515A; line-height: 1.6; }
+    .app { min-height: 100vh; }
+    .header { background: white; border-bottom: 1px solid #e5e5e5; padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; }
+    .header-content { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+    .logo { height: 50px; width: auto; }
+    .header-title h1 { font-size: 1.25rem; font-weight: 500; color: #4A515A; letter-spacing: 0.05em; text-transform: uppercase; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1.25rem; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; border: none; text-transform: uppercase; letter-spacing: 0.05em; }
+    .btn-primary { background: #4A515A; color: white; }
+    .btn-primary:hover { background: #3a4048; }
+    .btn-primary:disabled { background: #A6A39E; cursor: not-allowed; }
+    .btn-secondary { background: white; color: #4A515A; border: 1px solid #e5e5e5; }
+    .btn-secondary:hover { background: #f5f5f5; }
+    .main-content { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+    .stat-card { background: white; border: 1px solid #e5e5e5; border-radius: 8px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: all 0.2s ease; }
+    .stat-card:hover { border-color: #6C7883; }
+    .stat-card.active { border-color: #4A515A; box-shadow: 0 0 0 1px #4A515A; }
+    .stat-icon { width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .stat-icon.outstanding { background: #FEF3C7; color: #D97706; }
+    .stat-icon.in-progress { background: #DBEAFE; color: #2563EB; }
+    .stat-icon.complete { background: #D1FAE5; color: #059669; }
+    .stat-info { display: flex; flex-direction: column; }
+    .stat-number { font-size: 2rem; font-weight: 600; color: #4A515A; line-height: 1; }
+    .stat-label { font-size: 0.875rem; color: #6C7883; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
+    .search-section { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+    .search-box { flex: 1; display: flex; align-items: center; gap: 0.75rem; background: white; border: 1px solid #e5e5e5; border-radius: 4px; padding: 0.75rem 1rem; }
+    .search-box input { flex: 1; border: none; outline: none; font-family: 'Montserrat', sans-serif; font-size: 0.875rem; color: #4A515A; }
+    .search-box input::placeholder { color: #A6A39E; }
+    .table-container { background: white; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; }
+    .checklists-table { width: 100%; border-collapse: collapse; }
+    .checklists-table th { text-align: left; padding: 1rem 1.5rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6C7883; background: #fafafa; border-bottom: 1px solid #e5e5e5; }
+    .checklists-table td { padding: 1rem 1.5rem; font-size: 0.875rem; border-bottom: 1px solid #e5e5e5; }
+    .checklists-table tr:last-child td { border-bottom: none; }
+    .checklists-table tr:hover td { background: #fafafa; }
+    .project-name { font-weight: 500; color: #4A515A; }
+    .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.03em; }
+    .status-outstanding { background: #FEF3C7; color: #D97706; }
+    .status-in-progress { background: #DBEAFE; color: #2563EB; }
+    .status-complete { background: #D1FAE5; color: #059669; }
+    .actions-cell { display: flex; gap: 0.5rem; }
+    .icon-btn { width: 36px; height: 36px; border-radius: 4px; border: 1px solid #e5e5e5; background: white; color: #6C7883; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; font-size: 1rem; }
+    .icon-btn:hover { background: #4A515A; color: white; border-color: #4A515A; }
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(74, 81, 90, 0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 2rem; }
+    .modal { background: white; border-radius: 8px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal-large { max-width: 700px; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; border-bottom: 1px solid #e5e5e5; }
+    .modal-header h2 { font-size: 1.125rem; font-weight: 600; color: #4A515A; text-transform: uppercase; letter-spacing: 0.05em; }
+    .close-btn { width: 36px; height: 36px; border-radius: 4px; border: none; background: transparent; color: #6C7883; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .close-btn:hover { background: #f5f5f5; color: #4A515A; }
+    .modal-body { padding: 1.5rem; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 1rem; padding: 1.5rem; border-top: 1px solid #e5e5e5; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6C7883; margin-bottom: 0.5rem; }
+    .form-group input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #e5e5e5; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 0.875rem; color: #4A515A; }
+    .form-group input:focus { outline: none; border-color: #4A515A; }
+    .detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+    .detail-header h2 { font-size: 1.25rem; font-weight: 600; color: #4A515A; }
+    .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+    .detail-item { display: flex; flex-direction: column; gap: 0.25rem; }
+    .detail-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #A6A39E; }
+    .detail-value { font-size: 0.9375rem; color: #4A515A; }
+    .detail-actions { display: flex; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid #e5e5e5; }
+    .hidden { display: none !important; }
+    .empty-state { padding: 4rem 2rem; text-align: center; color: #A6A39E; }
+    @media (max-width: 768px) {
+      .header-content { flex-direction: column; gap: 1rem; text-align: center; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .table-container { overflow-x: auto; }
+      .checklists-table { min-width: 600px; }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="logo-section">
+          <img src="https://images.squarespace-cdn.com/content/v1/6001a0673fec132a5bb7bfe2/54a408d8-68d4-4101-a014-e0363a2c8992/Juniper-Structural-Engineering-Logo.png" alt="Juniper Engineers" class="logo">
+        </div>
+        <div class="header-title">
+          <h1>Pre-Construction Checklist Management</h1>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" onclick="openCreateModal()">
+            <span>+</span> Create New
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card" id="stat-outstanding" onclick="filterByStatus('outstanding')">
+          <div class="stat-icon outstanding">⚠</div>
+          <div class="stat-info">
+            <span class="stat-number" id="count-outstanding">1</span>
+            <span class="stat-label">Outstanding</span>
+          </div>
+        </div>
+        <div class="stat-card" id="stat-in-progress" onclick="filterByStatus('in-progress')">
+          <div class="stat-icon in-progress">⏱</div>
+          <div class="stat-info">
+            <span class="stat-number" id="count-in-progress">1</span>
+            <span class="stat-label">In Progress</span>
+          </div>
+        </div>
+        <div class="stat-card" id="stat-complete" onclick="filterByStatus('complete')">
+          <div class="stat-icon complete">✓</div>
+          <div class="stat-info">
+            <span class="stat-number" id="count-complete">1</span>
+            <span class="stat-label">Complete</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Section -->
+      <div class="search-section">
+        <div class="search-box">
+          <span>🔍</span>
+          <input type="text" id="searchInput" placeholder="Search projects, contractors, locations..." oninput="handleSearch()">
+        </div>
+        <button class="btn btn-secondary hidden" id="clearFilterBtn" onclick="clearFilter()">
+          Clear Filter ✕
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table class="checklists-table">
+          <thead>
+            <tr>
+              <th>Project</th>
+              <th>Location</th>
+              <th>Contractor</th>
+              <th>Status</th>
+              <th>Sent Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="checklistsBody">
+            <!-- Rows will be inserted here -->
+          </tbody>
+        </table>
+        <div class="empty-state hidden" id="emptyState">
+          <p>No checklists found</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Create Modal -->
+    <div class="modal-overlay hidden" id="createModal" onclick="closeCreateModal()">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Create New Checklist</h2>
+          <button class="close-btn" onclick="closeCreateModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Project Name</label>
+            <input type="text" id="newProjectName" placeholder="e.g., Mountain View Residence">
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="newLocation" placeholder="e.g., Fernie, BC">
+          </div>
+          <div class="form-group">
+            <label>Contractor Company</label>
+            <input type="text" id="newContractor" placeholder="e.g., Summit Builders Ltd.">
+          </div>
+          <div class="form-group">
+            <label>Contractor Email</label>
+            <input type="email" id="newContractorEmail" placeholder="e.g., contact@contractor.ca">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeCreateModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="createChecklist()">✉ Create & Send Email</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay hidden" id="detailModal" onclick="closeDetailModal()">
+      <div class="modal modal-large" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <button class="btn btn-secondary" onclick="closeDetailModal()">← Back to Dashboard</button>
+          <button class="close-btn" onclick="closeDetailModal()">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-header">
+            <h2 id="detailProjectName"></h2>
+            <span class="status-badge" id="detailStatus"></span>
+          </div>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <span class="detail-label">Location</span>
+              <span class="detail-value" id="detailLocation"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Contractor</span>
+              <span class="detail-value" id="detailContractor"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Email</span>
+              <span class="detail-value" id="detailEmail"></span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Sent Date</span>
+              <span class="detail-value" id="detailSentDate"></span>
+            </div>
+          </div>
+          <div class="detail-actions" id="detailActions">
+            <!-- Buttons inserted dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Data
+    let checklists = [
+      {
+        id: '1',
+        projectName: 'Mountain View Residence',
+        location: 'Fernie, BC',
+        contractor: 'Summit Builders Ltd.',
+        contractorEmail: 'mike@summitbuilders.ca',
+        status: 'outstanding',
+        sentDate: '2025-01-10',
+      },
+      {
+        id: '2',
+        projectName: 'Lakefront Custom Home',
+        location: 'Revelstoke, BC',
+        contractor: 'Alpine Construction',
+        contractorEmail: 'sarah@alpineconstruction.ca',
+        status: 'in-progress',
+        sentDate: '2025-01-08',
+      },
+      {
+        id: '3',
+        projectName: 'Timber Frame Cabin',
+        location: 'Golden, BC',
+        contractor: 'Kicking Horse Contracting',
+        contractorEmail: 'info@khcontracting.ca',
+        status: 'complete',
+        sentDate: '2025-01-05',
+        completedDate: '2025-01-11',
+      },
+    ];
+
+    let currentFilter = null;
+    let searchTerm = '';
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTable();
+      updateStats();
+    });
+
+    // Render table
+    function renderTable() {
+      const tbody = document.getElementById('checklistsBody');
+      const emptyState = document.getElementById('emptyState');
+      
+      let filtered = checklists.filter(c => {
+        const matchesSearch = 
+          c.projectName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          c.contractor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          c.location.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesFilter = currentFilter ? c.status === currentFilter : true;
+        return matchesSearch && matchesFilter;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      tbody.innerHTML = filtered.map(c => `
+        <tr>
+          <td class="project-name">${c.projectName}</td>
+          <td>${c.location}</td>
+          <td>${c.contractor}</td>
+          <td><span class="status-badge status-${c.status}">${formatStatus(c.status)}</span></td>
+          <td>${c.sentDate}</td>
+          <td class="actions-cell">
+            <button class="icon-btn" title="View Details" onclick="viewDetails('${c.id}')">👁</button>
+            ${c.status !== 'complete' ? `<button class="icon-btn" title="Send Reminder" onclick="sendReminder('${c.id}')">✉</button>` : ''}
+            ${c.status === 'complete' ? `<button class="icon-btn" title="Download PDF" onclick="downloadPdf('${c.id}')">⬇</button>` : ''}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Format status
+    function formatStatus(status) {
+      switch (status) {
+        case 'outstanding': return 'Outstanding';
+        case 'in-progress': return 'In Progress';
+        case 'complete': return 'Complete';
+        default: return status;
+      }
+    }
+
+    // Update stats
+    function updateStats() {
+      document.getElementById('count-outstanding').textContent = checklists.filter(c => c.status === 'outstanding').length;
+      document.getElementById('count-in-progress').textContent = checklists.filter(c => c.status === 'in-progress').length;
+      document.getElementById('count-complete').textContent = checklists.filter(c => c.status === 'complete').length;
+    }
+
+    // Filter by status
+    function filterByStatus(status) {
+      const clearBtn = document.getElementById('clearFilterBtn');
+      
+      if (currentFilter === status) {
+        currentFilter = null;
+        document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+        clearBtn.classList.add('hidden');
+      } else {
+        currentFilter = status;
+        document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+        document.getElementById(`stat-${status}`).classList.add('active');
+        clearBtn.classList.remove('hidden');
+      }
+      renderTable();
+    }
+
+    // Clear filter
+    function clearFilter() {
+      currentFilter = null;
+      document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
+      document.getElementById('clearFilterBtn').classList.add('hidden');
+      renderTable();
+    }
+
+    // Search
+    function handleSearch() {
+      searchTerm = document.getElementById('searchInput').value;
+      renderTable();
+    }
+
+    // Create modal
+    function openCreateModal() {
+      document.getElementById('createModal').classList.remove('hidden');
+    }
+
+    function closeCreateModal() {
+      document.getElementById('createModal').classList.add('hidden');
+      document.getElementById('newProjectName').value = '';
+      document.getElementById('newLocation').value = '';
+      document.getElementById('newContractor').value = '';
+      document.getElementById('newContractorEmail').value = '';
+    }
+
+    // Create checklist
+    function createChecklist() {
+      const projectName = document.getElementById('newProjectName').value;
+      const location = document.getElementById('newLocation').value;
+      const contractor = document.getElementById('newContractor').value;
+      const contractorEmail = document.getElementById('newContractorEmail').value;
+
+      if (!projectName || !contractorEmail) {
+        alert('Please fill in at least Project Name and Contractor Email');
+        return;
+      }
+
+      const newChecklist = {
+        id: Date.now().toString(),
+        projectName,
+        location,
+        contractor,
+        contractorEmail,
+        status: 'outstanding',
+        sentDate: new Date().toISOString().split('T')[0],
+      };
+
+      checklists.unshift(newChecklist);
+      renderTable();
+      updateStats();
+      closeCreateModal();
+      alert(`Email sent to ${contractorEmail} with checklist link!`);
+    }
+
+    // View details
+    function viewDetails(id) {
+      const checklist = checklists.find(c => c.id === id);
+      if (!checklist) return;
+
+      document.getElementById('detailProjectName').textContent = checklist.projectName;
+      document.getElementById('detailStatus').textContent = formatStatus(checklist.status);
+      document.getElementById('detailStatus').className = `status-badge status-${checklist.status}`;
+      document.getElementById('detailLocation').textContent = checklist.location;
+      document.getElementById('detailContractor').textContent = checklist.contractor;
+      document.getElementById('detailEmail').textContent = checklist.contractorEmail;
+      document.getElementById('detailSentDate').textContent = checklist.sentDate;
+
+      let actionsHtml = '';
+      if (checklist.status !== 'complete') {
+        actionsHtml += `<button class="btn btn-primary" onclick="sendReminder('${id}')">✉ Send Reminder</button>`;
+      } else {
+        actionsHtml += `<button class="btn btn-primary" onclick="downloadPdf('${id}')">⬇ Download PDF</button>`;
+      }
+      actionsHtml += `<button class="btn btn-secondary" onclick="copyLink('${id}')">Copy Form Link</button>`;
+      document.getElementById('detailActions').innerHTML = actionsHtml;
+
+      document.getElementById('detailModal').classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailModal').classList.add('hidden');
+    }
+
+    // Actions
+    function sendReminder(id) {
+      const checklist = checklists.find(c => c.id === id);
+      if (checklist) {
+        alert(`Reminder email sent to ${checklist.contractorEmail} for ${checklist.projectName}`);
+      }
+    }
+
+    function downloadPdf(id) {
+      alert('Downloading PDF...');
+    }
+
+    function copyLink(id) {
+      navigator.clipboard.writeText(`https://juniper-checklists.com/form/${id}`);
+      alert('Link copied to clipboard!');
+    }
+  </script>
+</body>
+</html>
