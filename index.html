@@ -74,6 +74,7 @@
     .detail-actions { display: flex; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid #e5e5e5; }
     .hidden { display: none !important; }
     .empty-state { padding: 4rem 2rem; text-align: center; color: #A6A39E; }
+    .loading { padding: 4rem 2rem; text-align: center; color: #6C7883; }
     @media (max-width: 768px) {
       .header-content { flex-direction: column; gap: 1rem; text-align: center; }
       .stats-grid { grid-template-columns: 1fr; }
@@ -109,21 +110,21 @@
         <div class="stat-card" id="stat-outstanding" onclick="filterByStatus('outstanding')">
           <div class="stat-icon outstanding">⚠</div>
           <div class="stat-info">
-            <span class="stat-number" id="count-outstanding">1</span>
+            <span class="stat-number" id="count-outstanding">0</span>
             <span class="stat-label">Outstanding</span>
           </div>
         </div>
         <div class="stat-card" id="stat-in-progress" onclick="filterByStatus('in-progress')">
           <div class="stat-icon in-progress">⏱</div>
           <div class="stat-info">
-            <span class="stat-number" id="count-in-progress">1</span>
+            <span class="stat-number" id="count-in-progress">0</span>
             <span class="stat-label">In Progress</span>
           </div>
         </div>
         <div class="stat-card" id="stat-complete" onclick="filterByStatus('complete')">
           <div class="stat-icon complete">✓</div>
           <div class="stat-info">
-            <span class="stat-number" id="count-complete">1</span>
+            <span class="stat-number" id="count-complete">0</span>
             <span class="stat-label">Complete</span>
           </div>
         </div>
@@ -154,7 +155,7 @@
             </tr>
           </thead>
           <tbody id="checklistsBody">
-            <!-- Rows will be inserted here -->
+            <tr><td colspan="6" class="loading">Loading checklists...</td></tr>
           </tbody>
         </table>
         <div class="empty-state hidden" id="emptyState">
@@ -190,7 +191,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" onclick="closeCreateModal()">Cancel</button>
-          <button class="btn btn-primary" onclick="createChecklist()">✉ Create & Send Email</button>
+          <button class="btn btn-primary" id="createBtn" onclick="createChecklist()">✉ Create & Send Email</button>
         </div>
       </div>
     </div>
@@ -233,46 +234,50 @@
     </div>
   </div>
 
-  <script>
-    // Data
-    let checklists = [
-      {
-        id: '1',
-        projectName: 'Mountain View Residence',
-        location: 'Fernie, BC',
-        contractor: 'Summit Builders Ltd.',
-        contractorEmail: 'mike@summitbuilders.ca',
-        status: 'outstanding',
-        sentDate: '2025-01-10',
-      },
-      {
-        id: '2',
-        projectName: 'Lakefront Custom Home',
-        location: 'Revelstoke, BC',
-        contractor: 'Alpine Construction',
-        contractorEmail: 'sarah@alpineconstruction.ca',
-        status: 'in-progress',
-        sentDate: '2025-01-08',
-      },
-      {
-        id: '3',
-        projectName: 'Timber Frame Cabin',
-        location: 'Golden, BC',
-        contractor: 'Kicking Horse Contracting',
-        contractorEmail: 'info@khcontracting.ca',
-        status: 'complete',
-        sentDate: '2025-01-05',
-        completedDate: '2025-01-11',
-      },
-    ];
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBthH9qo1nIWFkQV8WnW_9IX8j0c4GMf7s",
+      authDomain: "juniper-pre-construction.firebaseapp.com",
+      projectId: "juniper-pre-construction",
+      storageBucket: "juniper-pre-construction.firebasestorage.app",
+      messagingSenderId: "708367923638",
+      appId: "1:708367923638:web:fb5517db71551eedb0a917"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Data
+    let checklists = [];
     let currentFilter = null;
     let searchTerm = '';
 
+    // Load checklists from Firebase
+    async function loadChecklists() {
+      try {
+        const snapshot = await db.collection('checklists').orderBy('createdDate', 'desc').get();
+        checklists = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        renderTable();
+        updateStats();
+      } catch (error) {
+        console.error('Error loading checklists:', error);
+        document.getElementById('checklistsBody').innerHTML = 
+          '<tr><td colspan="6" class="loading">Error loading data. Please refresh.</td></tr>';
+      }
+    }
+
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
-      renderTable();
-      updateStats();
+      loadChecklists();
     });
 
     // Render table
@@ -299,10 +304,10 @@
       tbody.innerHTML = filtered.map(c => `
         <tr>
           <td class="project-name">${c.projectName}</td>
-          <td>${c.location}</td>
-          <td>${c.contractor}</td>
+          <td>${c.location || ''}</td>
+          <td>${c.contractor || ''}</td>
           <td><span class="status-badge status-${c.status}">${formatStatus(c.status)}</span></td>
-          <td>${c.sentDate}</td>
+          <td>${c.sentDate || ''}</td>
           <td class="actions-cell">
             <button class="icon-btn" title="View Details" onclick="viewDetails('${c.id}')">👁</button>
             ${c.status !== 'complete' ? `<button class="icon-btn" title="Send Reminder" onclick="sendReminder('${c.id}')">✉</button>` : ''}
@@ -374,8 +379,8 @@
       document.getElementById('newContractorEmail').value = '';
     }
 
-    // Create checklist
-    function createChecklist() {
+    // Create checklist - saves to Firebase
+    async function createChecklist() {
       const projectName = document.getElementById('newProjectName').value;
       const location = document.getElementById('newLocation').value;
       const contractor = document.getElementById('newContractor').value;
@@ -386,21 +391,42 @@
         return;
       }
 
-      const newChecklist = {
-        id: Date.now().toString(),
-        projectName,
-        location,
-        contractor,
-        contractorEmail,
-        status: 'outstanding',
-        sentDate: new Date().toISOString().split('T')[0],
-      };
+      // Disable button while saving
+      const btn = document.getElementById('createBtn');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
 
-      checklists.unshift(newChecklist);
-      renderTable();
-      updateStats();
-      closeCreateModal();
-      alert(`Email sent to ${contractorEmail} with checklist link!`);
+      try {
+        const newChecklist = {
+          projectName,
+          location,
+          contractor,
+          contractorEmail,
+          status: 'outstanding',
+          createdDate: new Date().toISOString(),
+          sentDate: new Date().toISOString().split('T')[0],
+        };
+
+        // Save to Firebase
+        const docRef = await db.collection('checklists').add(newChecklist);
+        
+        // Add to local array with the Firebase ID
+        checklists.unshift({
+          id: docRef.id,
+          ...newChecklist
+        });
+
+        renderTable();
+        updateStats();
+        closeCreateModal();
+        alert(`Checklist created! Email would be sent to ${contractorEmail}`);
+      } catch (error) {
+        console.error('Error creating checklist:', error);
+        alert('Error creating checklist. Please try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '✉ Create & Send Email';
+      }
     }
 
     // View details
@@ -411,10 +437,10 @@
       document.getElementById('detailProjectName').textContent = checklist.projectName;
       document.getElementById('detailStatus').textContent = formatStatus(checklist.status);
       document.getElementById('detailStatus').className = `status-badge status-${checklist.status}`;
-      document.getElementById('detailLocation').textContent = checklist.location;
-      document.getElementById('detailContractor').textContent = checklist.contractor;
+      document.getElementById('detailLocation').textContent = checklist.location || '';
+      document.getElementById('detailContractor').textContent = checklist.contractor || '';
       document.getElementById('detailEmail').textContent = checklist.contractorEmail;
-      document.getElementById('detailSentDate').textContent = checklist.sentDate;
+      document.getElementById('detailSentDate').textContent = checklist.sentDate || '';
 
       let actionsHtml = '';
       if (checklist.status !== 'complete') {
@@ -437,29 +463,39 @@
     function sendReminder(id) {
       const checklist = checklists.find(c => c.id === id);
       if (checklist) {
-        alert(`Reminder email sent to ${checklist.contractorEmail} for ${checklist.projectName}`);
+        alert(`Reminder email would be sent to ${checklist.contractorEmail} for ${checklist.projectName}`);
       }
     }
 
     function downloadPdf(id) {
-      alert('Downloading PDF...');
+      alert('PDF download coming soon!');
     }
 
     function copyLink(id) {
-      navigator.clipboard.writeText(`https://juniper-checklists.com/form/${id}`);
+      const baseUrl = window.location.origin;
+      navigator.clipboard.writeText(`${baseUrl}/form.html?id=${id}`);
       alert('Link copied to clipboard!');
     }
 
-    // Delete checklist
-    function deleteChecklist(id) {
+    // Delete checklist - deletes from Firebase
+    async function deleteChecklist(id) {
       const checklist = checklists.find(c => c.id === id);
       if (!checklist) return;
       
       if (confirm(`Are you sure you want to delete "${checklist.projectName}"?\n\nThis cannot be undone.`)) {
-        checklists = checklists.filter(c => c.id !== id);
-        renderTable();
-        updateStats();
-        closeDetailModal();
+        try {
+          // Delete from Firebase
+          await db.collection('checklists').doc(id).delete();
+          
+          // Remove from local array
+          checklists = checklists.filter(c => c.id !== id);
+          renderTable();
+          updateStats();
+          closeDetailModal();
+        } catch (error) {
+          console.error('Error deleting checklist:', error);
+          alert('Error deleting checklist. Please try again.');
+        }
       }
     }
   </script>
