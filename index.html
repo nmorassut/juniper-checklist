@@ -3,243 +3,367 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Juniper Engineers - Pre-Construction Checklist</title>
+  <title>Pre-Construction Checklist - Juniper Engineers</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Montserrat', sans-serif; background-color: #fafafa; color: #4A515A; line-height: 1.6; }
-    .app { min-height: 100vh; }
-    .header { background: white; border-bottom: 1px solid #e5e5e5; padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; }
-    .header-content { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+    .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+    .header { background: white; border-bottom: 1px solid #e5e5e5; padding: 1.5rem 2rem; margin-bottom: 2rem; }
+    .header-content { max-width: 800px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
     .logo { height: 25px; width: auto; }
-    .header-title h1 { font-size: 1.25rem; font-weight: 500; color: #4A515A; letter-spacing: 0.05em; text-transform: uppercase; }
-    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.625rem 1.25rem; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease; border: none; text-transform: uppercase; letter-spacing: 0.05em; }
-    .btn-primary { background: #4A515A; color: white; }
+    .project-banner { background: white; border: 1px solid #e5e5e5; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; }
+    .project-banner h1 { font-size: 1.5rem; font-weight: 600; color: #4A515A; margin-bottom: 0.5rem; }
+    .project-meta { display: flex; gap: 2rem; color: #6C7883; font-size: 0.875rem; }
+    .form-section { background: white; border: 1px solid #e5e5e5; border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; }
+    .section-header { background: #fafafa; padding: 1rem 1.5rem; border-bottom: 1px solid #e5e5e5; }
+    .section-header h2 { font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #4A515A; }
+    .section-body { padding: 1.5rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-group label { display: block; font-size: 0.875rem; font-weight: 500; color: #4A515A; margin-bottom: 0.5rem; }
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="date"],
+    .form-group textarea { 
+      width: 100%; padding: 0.75rem 1rem; border: 1px solid #e5e5e5; border-radius: 4px; 
+      font-family: 'Montserrat', sans-serif; font-size: 0.875rem; color: #4A515A; 
+    }
+    .form-group textarea { min-height: 80px; resize: vertical; }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #4A515A; }
+    .checkbox-item { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; border: 1px solid #e5e5e5; border-radius: 4px; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .checkbox-item:hover { border-color: #6C7883; }
+    .checkbox-item.checked { background: #f0fdf4; border-color: #059669; }
+    .checkbox-item input[type="checkbox"] { width: 20px; height: 20px; margin-top: 2px; cursor: pointer; flex-shrink: 0; }
+    .checkbox-item .checkbox-label { flex: 1; font-size: 0.875rem; color: #4A515A; }
+    .checkbox-simple { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; cursor: pointer; }
+    .checkbox-simple input { width: 18px; height: 18px; cursor: pointer; }
+    .checkbox-simple span { font-size: 0.875rem; color: #4A515A; }
+    .warning-box { background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 1rem; margin-bottom: 1rem; }
+    .warning-box p { font-size: 0.8125rem; color: #92400E; margin: 0; }
+    .info-box { background: #EFF6FF; border-left: 4px solid #3B82F6; padding: 1rem; margin-bottom: 1rem; }
+    .info-box p { font-size: 0.8125rem; color: #1E40AF; margin: 0; }
+    .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .signature-section { background: #fafafa; padding: 1.5rem; border-top: 1px solid #e5e5e5; }
+    .signature-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-top: 1rem; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.875rem 1.5rem; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 0.875rem; font-weight: 500; cursor: pointer; border: none; text-transform: uppercase; letter-spacing: 0.05em; }
+    .btn-primary { background: #4A515A; color: white; width: 100%; }
     .btn-primary:hover { background: #3a4048; }
     .btn-primary:disabled { background: #A6A39E; cursor: not-allowed; }
-    .btn-secondary { background: white; color: #4A515A; border: 1px solid #e5e5e5; }
-    .btn-secondary:hover { background: #f5f5f5; }
-    .btn-danger { background: #DC2626; color: white; }
-    .btn-danger:hover { background: #B91C1C; }
-    .main-content { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
-    .stat-card { background: white; border: 1px solid #e5e5e5; border-radius: 8px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: all 0.2s ease; }
-    .stat-card:hover { border-color: #6C7883; }
-    .stat-card.active { border-color: #4A515A; box-shadow: 0 0 0 1px #4A515A; }
-    .stat-icon { width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
-    .stat-icon.outstanding { background: #FEF3C7; color: #D97706; }
-    .stat-icon.in-progress { background: #DBEAFE; color: #2563EB; }
-    .stat-icon.complete { background: #D1FAE5; color: #059669; }
-    .stat-info { display: flex; flex-direction: column; }
-    .stat-number { font-size: 2rem; font-weight: 600; color: #4A515A; line-height: 1; }
-    .stat-label { font-size: 0.875rem; color: #6C7883; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
-    .search-section { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
-    .search-box { flex: 1; display: flex; align-items: center; gap: 0.75rem; background: white; border: 1px solid #e5e5e5; border-radius: 4px; padding: 0.75rem 1rem; }
-    .search-box input { flex: 1; border: none; outline: none; font-family: 'Montserrat', sans-serif; font-size: 0.875rem; color: #4A515A; }
-    .search-box input::placeholder { color: #A6A39E; }
-    .table-container { background: white; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; }
-    .checklists-table { width: 100%; border-collapse: collapse; }
-    .checklists-table th { text-align: left; padding: 1rem 1.5rem; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6C7883; background: #fafafa; border-bottom: 1px solid #e5e5e5; }
-    .checklists-table td { padding: 1rem 1.5rem; font-size: 0.875rem; border-bottom: 1px solid #e5e5e5; }
-    .checklists-table tr:last-child td { border-bottom: none; }
-    .checklists-table tr:hover td { background: #fafafa; }
-    .project-name { font-weight: 500; color: #4A515A; }
-    .status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.03em; }
-    .status-outstanding { background: #FEF3C7; color: #D97706; }
-    .status-in-progress { background: #DBEAFE; color: #2563EB; }
-    .status-complete { background: #D1FAE5; color: #059669; }
-    .actions-cell { display: flex; gap: 0.5rem; }
-    .icon-btn { width: 36px; height: 36px; border-radius: 4px; border: 1px solid #e5e5e5; background: white; color: #6C7883; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; font-size: 1rem; }
-    .icon-btn:hover { background: #4A515A; color: white; border-color: #4A515A; }
-    .icon-btn-danger:hover { background: #DC2626; color: white; border-color: #DC2626; }
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(74, 81, 90, 0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 2rem; }
-    .modal { background: white; border-radius: 8px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
-    .modal-large { max-width: 700px; }
-    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; border-bottom: 1px solid #e5e5e5; }
-    .modal-header h2 { font-size: 1.125rem; font-weight: 600; color: #4A515A; text-transform: uppercase; letter-spacing: 0.05em; }
-    .close-btn { width: 36px; height: 36px; border-radius: 4px; border: none; background: transparent; color: #6C7883; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
-    .close-btn:hover { background: #f5f5f5; color: #4A515A; }
-    .modal-body { padding: 1.5rem; }
-    .modal-footer { display: flex; justify-content: flex-end; gap: 1rem; padding: 1.5rem; border-top: 1px solid #e5e5e5; }
-    .form-group { margin-bottom: 1.25rem; }
-    .form-group label { display: block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6C7883; margin-bottom: 0.5rem; }
-    .form-group input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #e5e5e5; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 0.875rem; color: #4A515A; }
-    .form-group input:focus { outline: none; border-color: #4A515A; }
-    .detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
-    .detail-header h2 { font-size: 1.25rem; font-weight: 600; color: #4A515A; }
-    .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
-    .detail-item { display: flex; flex-direction: column; gap: 0.25rem; }
-    .detail-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #A6A39E; }
-    .detail-value { font-size: 0.9375rem; color: #4A515A; }
-    .detail-actions { display: flex; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid #e5e5e5; }
+    .loading { text-align: center; padding: 4rem 2rem; color: #6C7883; }
+    .error { text-align: center; padding: 4rem 2rem; color: #DC2626; }
+    .success-message { background: #D1FAE5; border: 1px solid #059669; border-radius: 8px; padding: 2rem; text-align: center; margin: 2rem 0; }
+    .success-message h2 { color: #059669; margin-bottom: 0.5rem; }
+    .success-message p { color: #065F46; }
     .hidden { display: none !important; }
-    .empty-state { padding: 4rem 2rem; text-align: center; color: #A6A39E; }
-    .loading { padding: 4rem 2rem; text-align: center; color: #6C7883; }
-    @media (max-width: 768px) {
-      .header-content { flex-direction: column; gap: 1rem; text-align: center; }
-      .stats-grid { grid-template-columns: 1fr; }
-      .table-container { overflow-x: auto; }
-      .checklists-table { min-width: 600px; }
-      .detail-grid { grid-template-columns: 1fr; }
+    .required::after { content: ' *'; color: #DC2626; }
+    .form-footer { text-align: center; padding: 2rem; color: #A6A39E; font-size: 0.75rem; }
+    @media (max-width: 640px) {
+      .container { padding: 1rem; }
+      .two-column, .signature-grid { grid-template-columns: 1fr; }
+      .project-meta { flex-direction: column; gap: 0.5rem; }
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <!-- Header -->
-    <header class="header">
-      <div class="header-content">
-        <div class="logo-section">
-          <img src="https://raw.githubusercontent.com/nmorassut/juniper-checklist/main/j-logo-text-black-rgb.png" alt="Juniper Engineers" class="logo">
-        </div>
-        <div class="header-title">
-          <h1>Pre-Construction Checklist Management</h1>
-        </div>
-        <div class="header-actions">
-          <button class="btn btn-primary" onclick="openCreateModal()">
-            <span>+</span> Create New
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Stats Cards -->
-      <div class="stats-grid">
-        <div class="stat-card" id="stat-outstanding" onclick="filterByStatus('outstanding')">
-          <div class="stat-icon outstanding">⚠</div>
-          <div class="stat-info">
-            <span class="stat-number" id="count-outstanding">0</span>
-            <span class="stat-label">Outstanding</span>
-          </div>
-        </div>
-        <div class="stat-card" id="stat-in-progress" onclick="filterByStatus('in-progress')">
-          <div class="stat-icon in-progress">⏱</div>
-          <div class="stat-info">
-            <span class="stat-number" id="count-in-progress">0</span>
-            <span class="stat-label">In Progress</span>
-          </div>
-        </div>
-        <div class="stat-card" id="stat-complete" onclick="filterByStatus('complete')">
-          <div class="stat-icon complete">✓</div>
-          <div class="stat-info">
-            <span class="stat-number" id="count-complete">0</span>
-            <span class="stat-label">Complete</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Search Section -->
-      <div class="search-section">
-        <div class="search-box">
-          <span>🔍</span>
-          <input type="text" id="searchInput" placeholder="Search projects, contractors, locations..." oninput="handleSearch()">
-        </div>
-        <button class="btn btn-secondary hidden" id="clearFilterBtn" onclick="clearFilter()">
-          Clear Filter ✕
-        </button>
-      </div>
-
-      <!-- Table -->
-      <div class="table-container">
-        <table class="checklists-table">
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Location</th>
-              <th>Contractor</th>
-              <th>Status</th>
-              <th>Sent Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="checklistsBody">
-            <tr><td colspan="6" class="loading">Loading checklists...</td></tr>
-          </tbody>
-        </table>
-        <div class="empty-state hidden" id="emptyState">
-          <p>No checklists found</p>
-        </div>
-      </div>
-    </main>
-
-    <!-- Create Modal -->
-    <div class="modal-overlay hidden" id="createModal" onclick="closeCreateModal()">
-      <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-header">
-          <h2>Create New Checklist</h2>
-          <button class="close-btn" onclick="closeCreateModal()">×</button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label>Project Name</label>
-            <input type="text" id="newProjectName" placeholder="e.g., Mountain View Residence">
-          </div>
-          <div class="form-group">
-            <label>Location</label>
-            <input type="text" id="newLocation" placeholder="e.g., Fernie, BC">
-          </div>
-          <div class="form-group">
-            <label>Contractor Company</label>
-            <input type="text" id="newContractor" placeholder="e.g., Summit Builders Ltd.">
-          </div>
-          <div class="form-group">
-            <label>Contractor Email</label>
-            <input type="email" id="newContractorEmail" placeholder="e.g., contact@contractor.ca">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" onclick="closeCreateModal()">Cancel</button>
-          <button class="btn btn-primary" id="createBtn" onclick="createChecklist()">✉ Create & Send Email</button>
-        </div>
-      </div>
+  <header class="header">
+    <div class="header-content">
+      <img src="https://raw.githubusercontent.com/nmorassut/juniper-checklist/main/j-logo-text-black-rgb.png" alt="Juniper Engineers" class="logo">
+      <span style="font-size: 0.75rem; color: #6C7883; text-transform: uppercase; letter-spacing: 0.05em;">Pre-Construction Checklist</span>
     </div>
+  </header>
 
-    <!-- Detail Modal -->
-    <div class="modal-overlay hidden" id="detailModal" onclick="closeDetailModal()">
-      <div class="modal modal-large" onclick="event.stopPropagation()">
-        <div class="modal-header">
-          <button class="btn btn-secondary" onclick="closeDetailModal()">← Back to Dashboard</button>
-          <button class="close-btn" onclick="closeDetailModal()">×</button>
-        </div>
-        <div class="modal-body">
-          <div class="detail-header">
-            <h2 id="detailProjectName"></h2>
-            <span class="status-badge" id="detailStatus"></span>
-          </div>
-          <div class="detail-grid">
-            <div class="detail-item">
-              <span class="detail-label">Location</span>
-              <span class="detail-value" id="detailLocation"></span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Contractor</span>
-              <span class="detail-value" id="detailContractor"></span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Email</span>
-              <span class="detail-value" id="detailEmail"></span>
-            </div>
-            <div class="detail-item">
-              <span class="detail-label">Sent Date</span>
-              <span class="detail-value" id="detailSentDate"></span>
-            </div>
-          </div>
-          <div class="detail-actions" id="detailActions">
-            <!-- Buttons inserted dynamically -->
-          </div>
-        </div>
-      </div>
+  <div class="container" id="loadingState">
+    <div class="loading">Loading checklist...</div>
+  </div>
+
+  <div class="container hidden" id="errorState">
+    <div class="error">
+      <h2>Checklist Not Found</h2>
+      <p>This checklist link may be invalid or expired. Please contact Juniper Engineers.</p>
     </div>
   </div>
 
-  <!-- Firebase SDK -->
+  <div class="container hidden" id="successState">
+    <div class="success-message">
+      <h2>✓ Checklist Submitted Successfully</h2>
+      <p>Thank you for completing the pre-construction checklist. Juniper Engineers has been notified and will be in touch.</p>
+    </div>
+  </div>
+
+  <div class="container hidden" id="formContainer">
+    <div class="project-banner">
+      <h1 id="projectName">Project Name</h1>
+      <div class="project-meta">
+        <span>📍 <span id="projectLocation">Location</span></span>
+        <span>📅 Sent: <span id="projectSentDate">Date</span></span>
+      </div>
+    </div>
+
+    <form id="checklistForm">
+      
+      <!-- Section 1: Contractor Information -->
+      <div class="form-section">
+        <div class="section-header">
+          <h2>Section 1: Contractor Information</h2>
+        </div>
+        <div class="section-body">
+          <div class="two-column">
+            <div class="form-group">
+              <label class="required">Your Name</label>
+              <input type="text" id="contractorName" required>
+            </div>
+            <div class="form-group">
+              <label class="required">Your Role/Title</label>
+              <input type="text" id="contractorRole" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="required">Email</label>
+            <input type="email" id="contractorEmailInput" required>
+          </div>
+          <div class="form-group">
+            <label>Site Supervisor (if different)</label>
+            <input type="text" id="siteSupervisor" placeholder="Name">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Drawing Package -->
+      <div class="form-section">
+        <div class="section-header">
+          <h2>Section 2: Drawing Package</h2>
+        </div>
+        <div class="section-body">
+          <div class="warning-box">
+            <p><strong>Building Permit (BP) drawings are NOT for construction.</strong> All BP hard copies must be destroyed or removed from site. Only Issued For Construction (IFC) drawings shall be used. If IFC drawings are not yet issued, BP may be used for rough pricing only.</p>
+          </div>
+          
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="ackDrawings" required>
+            <div class="checkbox-label">I understand BP drawings are not for construction and will ensure all trades use IFC drawings only</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: General Notes -->
+      <div class="form-section">
+        <div class="section-header">
+          <h2>Section 3: General Notes Review</h2>
+        </div>
+        <div class="section-body">
+          <div class="info-box">
+            <p>Review the Structural General Notes included with the drawing package. These contain critical information about materials, connections, and construction requirements.</p>
+          </div>
+          
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="ackGeneralNotes" required>
+            <div class="checkbox-label">I have read and understand the Structural General Notes</div>
+          </div>
+          
+          <div class="form-group" style="margin-top: 1rem;">
+            <label>Questions about the General Notes?</label>
+            <textarea id="generalNotesQuestions" placeholder="Enter any questions or items needing clarification..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Shear Wall / Lateral Requirements -->
+      <div class="form-section">
+        <div class="section-header">
+          <h2>Section 4: Shear Wall & Lateral Requirements</h2>
+        </div>
+        <div class="section-body">
+          <div class="warning-box">
+            <p><strong>Hold Down Anchors:</strong> HDU hold downs greater than HDU8 and other specified anchors MUST be cast into concrete. Post-installed or epoxy anchors are NOT permitted. Refer to plans or contact Juniper.</p>
+          </div>
+          
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="ackHoldDowns" required>
+            <div class="checkbox-label">I understand cast-in-place anchor requirements</div>
+          </div>
+          
+          <div class="warning-box">
+            <p><strong>Shear Wall Nailing:</strong> Nail gun pressure must be set evenly. Overdriven nails exceeding 10% of panel thickness will be rejected.</p>
+          </div>
+          
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="ackNailing" required>
+            <div class="checkbox-label">I understand shear wall nailing requirements</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Shop Drawings -->
+      <div class="form-section">
+        <div class="section-header">
+          <h2>Section 5: Shop Drawings</h2>
+        </div>
+        <div class="section-body">
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="ackShopDrawings" required>
+            <div class="checkbox-label">I understand shop drawings must be submitted and approved before fabrication</div>
+          </div>
+          
+          <div class="form-group" style="margin-top: 1rem;">
+            <label>Fabricators engaged (check all that apply):</label>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem;">
+            <label class="checkbox-simple"><input type="checkbox" id="fabSteel"> <span>Steel</span></label>
+            <label class="checkbox-simple"><input type="checkbox" id="fabEWP"> <span>EWP Supplier</span></label>
+            <label class="checkbox-simple"><input type="checkbox" id="fabIJoist"> <span>I-Joist</span></label>
+            <label class="checkbox-simple"><input type="checkbox" id="fabTruss"> <span>Truss</span></label>
+            <label class="checkbox-simple"><input type="checkbox" id="fabWallPanel"> <span>Wall Panel</span></label>
+            <label class="checkbox-simple"><input type="checkbox" id="fabMassTimber"> <span>Mass Timber</span></label>
+          </div>
+          
+          <div class="form-group">
+            <label>Fabricators not yet engaged</label>
+            <textarea id="fabricatorsNotEngaged" placeholder="List any fabricators still needed..."></textarea>
+          </div>
+          
+          <div class="warning-box">
+            <p><strong>EWP Grades:</strong> Confirm your supplier stocks the material grades and joist series listed in Juniper's general notes. Notify Juniper of any discrepancies BEFORE shop drawing submittal.</p>
+          </div>
+          
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="ackEWPGrades">
+            <div class="checkbox-label">I have confirmed EWP grades with supplier (or will notify Juniper of discrepancies)</div>
+          </div>
+          
+          <div class="form-group" style="margin-top: 1rem;">
+            <label>EWP supplier and any concerns</label>
+            <textarea id="ewpSupplierNotes" placeholder="Supplier name and any grade/series concerns..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Field Reviews -->
+      <div class="form-section">
+        <div class="section-header">
+          <h2>Section 6: Field Reviews</h2>
+        </div>
+        <div class="section-body">
+          <div class="warning-box">
+            <p><strong>48 hour advance notice is required</strong> for all field reviews. Structural elements must not be covered until reviewed by Juniper.</p>
+          </div>
+          
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="ackFieldReviewNotice" required>
+            <div class="checkbox-label">I will provide 48 hour notice and not cover structural elements until reviewed</div>
+          </div>
+          
+          <div class="info-box">
+            <p><strong>Concrete Reviews:</strong> One side of forms must remain off so reinforcing is clearly visible. Adequate time must be provided for review before pour.</p>
+          </div>
+          
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="ackConcreteReview" required>
+            <div class="checkbox-label">I understand concrete reinforcing review requirements</div>
+          </div>
+          
+          <div class="form-group" style="margin-top: 1rem;">
+            <label class="checkbox-simple">
+              <input type="checkbox" id="icfWalls"> 
+              <span>ICF walls will be used on this project</span>
+            </label>
+          </div>
+          
+          <div class="info-box">
+            <p><strong>If ICF:</strong> Photos of horizontal rebar in the first course must be reviewed by Juniper before proceeding with subsequent courses.</p>
+          </div>
+          
+          <div class="warning-box">
+            <p><strong>Photo Reviews:</strong> Photo reviews are at Juniper's sole discretion and may not be accepted without prior approval.</p>
+          </div>
+          
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="ackPhotoReviews" required>
+            <div class="checkbox-label">I understand photo reviews require prior Juniper approval</div>
+          </div>
+          
+          <div class="info-box">
+            <p><strong>Scope:</strong> Field Review confirms general conformance with structural drawings. It is NOT inspection or supervision. The contractor remains responsible for ensuring work meets the drawings.</p>
+          </div>
+          
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="ackFieldReviewScope" required>
+            <div class="checkbox-label">I understand I am responsible for ensuring work meets the structural drawings</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7: Construction Timeline -->
+      <div class="form-section">
+        <div class="section-header">
+          <h2>Section 7: Construction Timeline</h2>
+        </div>
+        <div class="section-body">
+          <div class="two-column">
+            <div class="form-group">
+              <label class="required">Anticipated Start Date</label>
+              <input type="date" id="startDate" required>
+            </div>
+            <div class="form-group">
+              <label class="required">Estimated Duration</label>
+              <input type="text" id="projectDuration" placeholder="e.g., 8 months" required>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 8: Additional Notes -->
+      <div class="form-section">
+        <div class="section-header">
+          <h2>Section 8: Additional Notes</h2>
+        </div>
+        <div class="section-body">
+          <div class="form-group">
+            <label>Questions, concerns, or items to discuss?</label>
+            <textarea id="additionalNotes" placeholder="Anything else before construction begins..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Signature -->
+      <div class="form-section">
+        <div class="section-header">
+          <h2>Acknowledgment & Signature</h2>
+        </div>
+        <div class="section-body">
+          <div class="checkbox-item" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="finalAck" required>
+            <div class="checkbox-label">I confirm this information is accurate and I have reviewed the structural drawings and general notes</div>
+          </div>
+          
+          <div class="signature-grid" style="margin-top: 1rem;">
+            <div class="form-group">
+              <label class="required">Signature (Type Full Name)</label>
+              <input type="text" id="signature" required placeholder="Full name">
+            </div>
+            <div class="form-group">
+              <label class="required">Date</label>
+              <input type="date" id="signatureDate" required>
+            </div>
+          </div>
+        </div>
+        
+        <div class="signature-section">
+          <button type="submit" class="btn btn-primary" id="submitBtn">Submit Checklist</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="form-footer">
+      <p>Juniper Engineers | juniperengineers.com</p>
+    </div>
+  </div>
+
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 
   <script>
-    // Firebase Configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBthH9qo1nIWFkQV8WnW_9IX8j0c4GMf7s",
       authDomain: "juniper-pre-construction.firebaseapp.com",
@@ -249,255 +373,133 @@
       appId: "1:708367923638:web:fb5517db71551eedb0a917"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    let checklistId = null;
+    let checklistData = null;
 
-    // Data
-    let checklists = [];
-    let currentFilter = null;
-    let searchTerm = '';
-
-    // Load checklists from Firebase
-    async function loadChecklists() {
-      try {
-        const snapshot = await db.collection('checklists').orderBy('createdDate', 'desc').get();
-        checklists = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        renderTable();
-        updateStats();
-      } catch (error) {
-        console.error('Error loading checklists:', error);
-        document.getElementById('checklistsBody').innerHTML = 
-          '<tr><td colspan="6" class="loading">Error loading data. Please refresh.</td></tr>';
-      }
+    function getChecklistId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
     }
 
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-      loadChecklists();
-    });
-
-    // Render table
-    function renderTable() {
-      const tbody = document.getElementById('checklistsBody');
-      const emptyState = document.getElementById('emptyState');
-      
-      let filtered = checklists.filter(c => {
-        const matchesSearch = 
-          c.projectName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          c.contractor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          c.location.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesFilter = currentFilter ? c.status === currentFilter : true;
-        return matchesSearch && matchesFilter;
-      });
-
-      if (filtered.length === 0) {
-        tbody.innerHTML = '';
-        emptyState.classList.remove('hidden');
-        return;
-      }
-
-      emptyState.classList.add('hidden');
-      tbody.innerHTML = filtered.map(c => `
-        <tr>
-          <td class="project-name">${c.projectName}</td>
-          <td>${c.location || ''}</td>
-          <td>${c.contractor || ''}</td>
-          <td><span class="status-badge status-${c.status}">${formatStatus(c.status)}</span></td>
-          <td>${c.sentDate || ''}</td>
-          <td class="actions-cell">
-            <button class="icon-btn" title="View Details" onclick="viewDetails('${c.id}')">👁</button>
-            ${c.status !== 'complete' ? `<button class="icon-btn" title="Send Reminder" onclick="sendReminder('${c.id}')">✉</button>` : ''}
-            ${c.status === 'complete' ? `<button class="icon-btn" title="Download PDF" onclick="downloadPdf('${c.id}')">⬇</button>` : ''}
-            <button class="icon-btn icon-btn-danger" title="Delete" onclick="deleteChecklist('${c.id}')">🗑</button>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    // Format status
-    function formatStatus(status) {
-      switch (status) {
-        case 'outstanding': return 'Outstanding';
-        case 'in-progress': return 'In Progress';
-        case 'complete': return 'Complete';
-        default: return status;
-      }
-    }
-
-    // Update stats
-    function updateStats() {
-      document.getElementById('count-outstanding').textContent = checklists.filter(c => c.status === 'outstanding').length;
-      document.getElementById('count-in-progress').textContent = checklists.filter(c => c.status === 'in-progress').length;
-      document.getElementById('count-complete').textContent = checklists.filter(c => c.status === 'complete').length;
-    }
-
-    // Filter by status
-    function filterByStatus(status) {
-      const clearBtn = document.getElementById('clearFilterBtn');
-      
-      if (currentFilter === status) {
-        currentFilter = null;
-        document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
-        clearBtn.classList.add('hidden');
-      } else {
-        currentFilter = status;
-        document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
-        document.getElementById(`stat-${status}`).classList.add('active');
-        clearBtn.classList.remove('hidden');
-      }
-      renderTable();
-    }
-
-    // Clear filter
-    function clearFilter() {
-      currentFilter = null;
-      document.querySelectorAll('.stat-card').forEach(c => c.classList.remove('active'));
-      document.getElementById('clearFilterBtn').classList.add('hidden');
-      renderTable();
-    }
-
-    // Search
-    function handleSearch() {
-      searchTerm = document.getElementById('searchInput').value;
-      renderTable();
-    }
-
-    // Create modal
-    function openCreateModal() {
-      document.getElementById('createModal').classList.remove('hidden');
-    }
-
-    function closeCreateModal() {
-      document.getElementById('createModal').classList.add('hidden');
-      document.getElementById('newProjectName').value = '';
-      document.getElementById('newLocation').value = '';
-      document.getElementById('newContractor').value = '';
-      document.getElementById('newContractorEmail').value = '';
-    }
-
-    // Create checklist - saves to Firebase
-    async function createChecklist() {
-      const projectName = document.getElementById('newProjectName').value;
-      const location = document.getElementById('newLocation').value;
-      const contractor = document.getElementById('newContractor').value;
-      const contractorEmail = document.getElementById('newContractorEmail').value;
-
-      if (!projectName || !contractorEmail) {
-        alert('Please fill in at least Project Name and Contractor Email');
-        return;
-      }
-
-      // Disable button while saving
-      const btn = document.getElementById('createBtn');
-      btn.disabled = true;
-      btn.textContent = 'Saving...';
+    async function loadChecklist() {
+      checklistId = getChecklistId();
+      if (!checklistId) { showError(); return; }
 
       try {
-        const newChecklist = {
-          projectName,
-          location,
-          contractor,
-          contractorEmail,
-          status: 'outstanding',
-          createdDate: new Date().toISOString(),
-          sentDate: new Date().toISOString().split('T')[0],
-        };
+        const doc = await db.collection('checklists').doc(checklistId).get();
+        if (!doc.exists) { showError(); return; }
 
-        // Save to Firebase
-        const docRef = await db.collection('checklists').add(newChecklist);
+        checklistData = doc.data();
+        if (checklistData.status === 'complete') { showSuccess(); return; }
+
+        document.getElementById('projectName').textContent = checklistData.projectName;
+        document.getElementById('projectLocation').textContent = checklistData.location || 'Not specified';
+        document.getElementById('projectSentDate').textContent = checklistData.sentDate || '';
         
-        // Add to local array with the Firebase ID
-        checklists.unshift({
-          id: docRef.id,
-          ...newChecklist
+        if (checklistData.contractorEmail) {
+          document.getElementById('contractorEmailInput').value = checklistData.contractorEmail;
+        }
+        document.getElementById('signatureDate').value = new Date().toISOString().split('T')[0];
+
+        await db.collection('checklists').doc(checklistId).update({
+          status: 'in-progress',
+          lastViewed: new Date().toISOString()
         });
 
-        renderTable();
-        updateStats();
-        closeCreateModal();
-        alert(`Checklist created! Email would be sent to ${contractorEmail}`);
+        showForm();
       } catch (error) {
-        console.error('Error creating checklist:', error);
-        alert('Error creating checklist. Please try again.');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = '✉ Create & Send Email';
+        console.error('Error:', error);
+        showError();
       }
     }
 
-    // View details
-    function viewDetails(id) {
-      const checklist = checklists.find(c => c.id === id);
-      if (!checklist) return;
+    function showForm() {
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('errorState').classList.add('hidden');
+      document.getElementById('successState').classList.add('hidden');
+      document.getElementById('formContainer').classList.remove('hidden');
+    }
 
-      document.getElementById('detailProjectName').textContent = checklist.projectName;
-      document.getElementById('detailStatus').textContent = formatStatus(checklist.status);
-      document.getElementById('detailStatus').className = `status-badge status-${checklist.status}`;
-      document.getElementById('detailLocation').textContent = checklist.location || '';
-      document.getElementById('detailContractor').textContent = checklist.contractor || '';
-      document.getElementById('detailEmail').textContent = checklist.contractorEmail;
-      document.getElementById('detailSentDate').textContent = checklist.sentDate || '';
+    function showError() {
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('formContainer').classList.add('hidden');
+      document.getElementById('successState').classList.add('hidden');
+      document.getElementById('errorState').classList.remove('hidden');
+    }
 
-      let actionsHtml = '';
-      if (checklist.status !== 'complete') {
-        actionsHtml += `<button class="btn btn-primary" onclick="sendReminder('${id}')">✉ Send Reminder</button>`;
-      } else {
-        actionsHtml += `<button class="btn btn-primary" onclick="downloadPdf('${id}')">⬇ Download PDF</button>`;
+    function showSuccess() {
+      document.getElementById('loadingState').classList.add('hidden');
+      document.getElementById('formContainer').classList.add('hidden');
+      document.getElementById('errorState').classList.add('hidden');
+      document.getElementById('successState').classList.remove('hidden');
+    }
+
+    function toggleCheckbox(element) {
+      const checkbox = element.querySelector('input[type="checkbox"]');
+      checkbox.checked = !checkbox.checked;
+      element.classList.toggle('checked', checkbox.checked);
+    }
+
+    document.getElementById('checklistForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+
+      try {
+        const formData = {
+          contractorName: document.getElementById('contractorName').value,
+          contractorRole: document.getElementById('contractorRole').value,
+          contractorEmail: document.getElementById('contractorEmailInput').value,
+          siteSupervisor: document.getElementById('siteSupervisor').value,
+          ackDrawings: document.getElementById('ackDrawings').checked,
+          ackGeneralNotes: document.getElementById('ackGeneralNotes').checked,
+          generalNotesQuestions: document.getElementById('generalNotesQuestions').value,
+          ackHoldDowns: document.getElementById('ackHoldDowns').checked,
+          ackNailing: document.getElementById('ackNailing').checked,
+          ackShopDrawings: document.getElementById('ackShopDrawings').checked,
+          fabricatorsEngaged: {
+            steel: document.getElementById('fabSteel').checked,
+            ewp: document.getElementById('fabEWP').checked,
+            iJoist: document.getElementById('fabIJoist').checked,
+            truss: document.getElementById('fabTruss').checked,
+            wallPanel: document.getElementById('fabWallPanel').checked,
+            massTimber: document.getElementById('fabMassTimber').checked
+          },
+          fabricatorsNotEngaged: document.getElementById('fabricatorsNotEngaged').value,
+          ackEWPGrades: document.getElementById('ackEWPGrades').checked,
+          ewpSupplierNotes: document.getElementById('ewpSupplierNotes').value,
+          ackFieldReviewNotice: document.getElementById('ackFieldReviewNotice').checked,
+          ackConcreteReview: document.getElementById('ackConcreteReview').checked,
+          icfWalls: document.getElementById('icfWalls').checked,
+          ackPhotoReviews: document.getElementById('ackPhotoReviews').checked,
+          ackFieldReviewScope: document.getElementById('ackFieldReviewScope').checked,
+          startDate: document.getElementById('startDate').value,
+          projectDuration: document.getElementById('projectDuration').value,
+          additionalNotes: document.getElementById('additionalNotes').value,
+          signature: document.getElementById('signature').value,
+          signatureDate: document.getElementById('signatureDate').value,
+          submittedAt: new Date().toISOString()
+        };
+
+        await db.collection('checklists').doc(checklistId).update({
+          status: 'complete',
+          completedDate: new Date().toISOString().split('T')[0],
+          contractorResponse: formData
+        });
+
+        showSuccess();
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error submitting. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Checklist';
       }
-      actionsHtml += `<button class="btn btn-secondary" onclick="copyLink('${id}')">Copy Form Link</button>`;
-      actionsHtml += `<button class="btn btn-danger" onclick="deleteChecklist('${id}')">🗑 Delete</button>`;
-      document.getElementById('detailActions').innerHTML = actionsHtml;
+    });
 
-      document.getElementById('detailModal').classList.remove('hidden');
-    }
-
-    function closeDetailModal() {
-      document.getElementById('detailModal').classList.add('hidden');
-    }
-
-    // Actions
-    function sendReminder(id) {
-      const checklist = checklists.find(c => c.id === id);
-      if (checklist) {
-        alert(`Reminder email would be sent to ${checklist.contractorEmail} for ${checklist.projectName}`);
-      }
-    }
-
-    function downloadPdf(id) {
-      alert('PDF download coming soon!');
-    }
-
-    function copyLink(id) {
-      const baseUrl = window.location.origin;
-      navigator.clipboard.writeText(`${baseUrl}/form.html?id=${id}`);
-      alert('Link copied to clipboard!');
-    }
-
-    // Delete checklist - deletes from Firebase
-    async function deleteChecklist(id) {
-      const checklist = checklists.find(c => c.id === id);
-      if (!checklist) return;
-      
-      if (confirm(`Are you sure you want to delete "${checklist.projectName}"?\n\nThis cannot be undone.`)) {
-        try {
-          // Delete from Firebase
-          await db.collection('checklists').doc(id).delete();
-          
-          // Remove from local array
-          checklists = checklists.filter(c => c.id !== id);
-          renderTable();
-          updateStats();
-          closeDetailModal();
-        } catch (error) {
-          console.error('Error deleting checklist:', error);
-          alert('Error deleting checklist. Please try again.');
-        }
-      }
-    }
+    document.addEventListener('DOMContentLoaded', loadChecklist);
   </script>
 </body>
 </html>
